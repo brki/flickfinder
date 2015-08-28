@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FlickFinder" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flick Finder" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8t-iD-yM3">
+                                <rect key="frame" x="236" y="28" width="129" height="29"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HmZ-w9-PEZ">
+                                <rect key="frame" x="15" y="65" width="570" height="295"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Freetext search" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TEl-RN-o1t" userLabel="Freetext search field">
+                                <rect key="frame" x="15" y="375" width="450" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYj-Fb-bhu" userLabel="FreeTextSearchButton">
+                                <rect key="frame" x="480" y="374" width="32" height="32"/>
+                                <state key="normal" image="Search">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Latitude" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RSe-hl-0QN" userLabel="Latitude Field">
+                                <rect key="frame" x="90" y="420" width="180" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Longitude" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s9M-Ft-XFt" userLabel="Longitude Field">
+                                <rect key="frame" x="285" y="420" width="180" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMt-a7-ra0" userLabel="LatitudeLongitudeSearchButton">
+                                <rect key="frame" x="480" y="419" width="32" height="32"/>
+                                <state key="normal" image="Search">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAp-fd-dHR">
+                                <rect key="frame" x="149" y="458" width="63" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67b-Mg-6oB">
+                                <rect key="frame" x="337" y="458" width="77" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-NE-KGF" userLabel="Image Title">
+                                <rect key="frame" x="15" y="499" width="570" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.077730889944458231" green="0.14366319444444442" blue="0.078268490850569292" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RSe-hl-0QN" firstAttribute="centerX" secondItem="bAp-fd-dHR" secondAttribute="centerX" constant="-0.5" id="0Sj-zW-MbS"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="width" secondItem="nl7-NE-KGF" secondAttribute="width" id="27r-rV-6Jh"/>
+                            <constraint firstItem="tYj-Fb-bhu" firstAttribute="centerX" secondItem="JMt-a7-ra0" secondAttribute="centerX" id="4se-UY-ofP"/>
+                            <constraint firstItem="RSe-hl-0QN" firstAttribute="width" secondItem="TEl-RN-o1t" secondAttribute="width" multiplier="0.4" id="7Lt-B3-Vro"/>
+                            <constraint firstItem="67b-Mg-6oB" firstAttribute="top" secondItem="s9M-Ft-XFt" secondAttribute="bottom" constant="8" id="7Tt-Zx-T8G"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.95" id="8KY-oa-5FR"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="top" secondItem="z8t-iD-yM3" secondAttribute="bottom" constant="8" id="DKH-iL-thS"/>
+                            <constraint firstAttribute="centerX" secondItem="z8t-iD-yM3" secondAttribute="centerX" id="DWa-l3-Hzf"/>
+                            <constraint firstItem="s9M-Ft-XFt" firstAttribute="leading" secondItem="RSe-hl-0QN" secondAttribute="trailing" constant="15" id="KJY-5L-lMK"/>
+                            <constraint firstItem="s9M-Ft-XFt" firstAttribute="width" secondItem="TEl-RN-o1t" secondAttribute="width" multiplier="0.4" id="LPM-zp-bRT"/>
+                            <constraint firstItem="RSe-hl-0QN" firstAttribute="top" secondItem="TEl-RN-o1t" secondAttribute="bottom" constant="15" id="SHG-Jk-SM7"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="leading" secondItem="TEl-RN-o1t" secondAttribute="leading" id="UPC-Hn-TAW"/>
+                            <constraint firstItem="RSe-hl-0QN" firstAttribute="centerY" secondItem="s9M-Ft-XFt" secondAttribute="centerY" id="Vhv-nm-14X"/>
+                            <constraint firstItem="67b-Mg-6oB" firstAttribute="centerX" secondItem="s9M-Ft-XFt" secondAttribute="centerX" constant="0.5" id="Vmh-39-bpq"/>
+                            <constraint firstItem="s9M-Ft-XFt" firstAttribute="centerY" secondItem="JMt-a7-ra0" secondAttribute="centerY" id="Zz6-ww-Ri0"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="centerX" secondItem="nl7-NE-KGF" secondAttribute="centerX" id="eyZ-4M-cJS"/>
+                            <constraint firstItem="nl7-NE-KGF" firstAttribute="top" secondItem="67b-Mg-6oB" secondAttribute="bottom" constant="20" id="fU5-gT-YKy"/>
+                            <constraint firstItem="tYj-Fb-bhu" firstAttribute="leading" secondItem="TEl-RN-o1t" secondAttribute="trailing" constant="15" id="iHF-Mo-rQl"/>
+                            <constraint firstItem="TEl-RN-o1t" firstAttribute="top" secondItem="HmZ-w9-PEZ" secondAttribute="bottom" constant="15" id="mC5-i9-6gh"/>
+                            <constraint firstAttribute="centerX" secondItem="HmZ-w9-PEZ" secondAttribute="centerX" id="mwP-r6-GsQ"/>
+                            <constraint firstItem="TEl-RN-o1t" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.75" id="p2n-ni-XGd"/>
+                            <constraint firstItem="z8t-iD-yM3" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="pJp-gC-9Jg"/>
+                            <constraint firstItem="TEl-RN-o1t" firstAttribute="trailing" secondItem="s9M-Ft-XFt" secondAttribute="trailing" id="qeb-Af-3S6"/>
+                            <constraint firstItem="67b-Mg-6oB" firstAttribute="baseline" secondItem="bAp-fd-dHR" secondAttribute="baseline" id="uyZ-Nd-Iq2"/>
+                            <constraint firstItem="tYj-Fb-bhu" firstAttribute="centerY" secondItem="TEl-RN-o1t" secondAttribute="centerY" id="wsC-P7-7nC"/>
+                            <constraint firstItem="HmZ-w9-PEZ" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.2" id="zqR-di-7pF"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Search" width="32" height="32"/>
+    </resources>
+</document>
