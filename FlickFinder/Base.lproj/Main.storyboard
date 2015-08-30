@@ -36,6 +36,9 @@
                                 <state key="normal" image="Search">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="searchByText:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vgh-zU-YBp"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Latitude" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RSe-hl-0QN" userLabel="Latitude Field">
                                 <rect key="frame" x="90" y="420" width="180" height="30"/>
@@ -52,6 +55,9 @@
                                 <state key="normal" image="Search">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="searchBylongitudeLatitude:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RkS-j8-M2s"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAp-fd-dHR">
                                 <rect key="frame" x="149" y="458" width="63" height="21"/>
@@ -65,18 +71,30 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-NE-KGF" userLabel="Image Title">
-                                <rect key="frame" x="15" y="499" width="570" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-NE-KGF" userLabel="Image Title">
+                                <rect key="frame" x="15" y="499" width="570" height="101"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" priority="750" constant="400" id="gTw-7p-B6k"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.077730889944458231" green="0.14366319444444442" blue="0.078268490850569292" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search to find an image" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gw-yl-y64">
+                                <rect key="frame" x="15" y="202" width="570" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="RSe-hl-0QN" firstAttribute="centerX" secondItem="bAp-fd-dHR" secondAttribute="centerX" constant="-0.5" id="0Sj-zW-MbS"/>
+                            <constraint firstItem="8gw-yl-y64" firstAttribute="width" secondItem="HmZ-w9-PEZ" secondAttribute="width" id="0iG-db-l68"/>
                             <constraint firstItem="HmZ-w9-PEZ" firstAttribute="width" secondItem="nl7-NE-KGF" secondAttribute="width" id="27r-rV-6Jh"/>
+                            <constraint firstItem="8gw-yl-y64" firstAttribute="centerY" secondItem="HmZ-w9-PEZ" secondAttribute="centerY" id="3iR-DB-dYj"/>
                             <constraint firstItem="tYj-Fb-bhu" firstAttribute="centerX" secondItem="JMt-a7-ra0" secondAttribute="centerX" id="4se-UY-ofP"/>
+                            <constraint firstItem="8gw-yl-y64" firstAttribute="centerX" secondItem="HmZ-w9-PEZ" secondAttribute="centerX" id="6pk-BC-nZ5"/>
                             <constraint firstItem="RSe-hl-0QN" firstAttribute="width" secondItem="TEl-RN-o1t" secondAttribute="width" multiplier="0.4" id="7Lt-B3-Vro"/>
                             <constraint firstItem="67b-Mg-6oB" firstAttribute="top" secondItem="s9M-Ft-XFt" secondAttribute="bottom" constant="8" id="7Tt-Zx-T8G"/>
                             <constraint firstItem="HmZ-w9-PEZ" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.95" id="8KY-oa-5FR"/>
@@ -84,6 +102,8 @@
                             <constraint firstAttribute="centerX" secondItem="z8t-iD-yM3" secondAttribute="centerX" id="DWa-l3-Hzf"/>
                             <constraint firstItem="s9M-Ft-XFt" firstAttribute="leading" secondItem="RSe-hl-0QN" secondAttribute="trailing" constant="15" id="KJY-5L-lMK"/>
                             <constraint firstItem="s9M-Ft-XFt" firstAttribute="width" secondItem="TEl-RN-o1t" secondAttribute="width" multiplier="0.4" id="LPM-zp-bRT"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="bottom" secondItem="nl7-NE-KGF" secondAttribute="top" priority="600" constant="100" id="MgA-pW-BMa"/>
+                            <constraint firstItem="nl7-NE-KGF" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="wfy-db-euE" secondAttribute="top" id="QkY-UQ-QtY"/>
                             <constraint firstItem="RSe-hl-0QN" firstAttribute="top" secondItem="TEl-RN-o1t" secondAttribute="bottom" constant="15" id="SHG-Jk-SM7"/>
                             <constraint firstItem="HmZ-w9-PEZ" firstAttribute="leading" secondItem="TEl-RN-o1t" secondAttribute="leading" id="UPC-Hn-TAW"/>
                             <constraint firstItem="RSe-hl-0QN" firstAttribute="centerY" secondItem="s9M-Ft-XFt" secondAttribute="centerY" id="Vhv-nm-14X"/>
@@ -102,6 +122,14 @@
                             <constraint firstItem="HmZ-w9-PEZ" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.2" id="zqR-di-7pF"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageTitle" destination="nl7-NE-KGF" id="sOk-Gc-sz1"/>
+                        <outlet property="imageView" destination="HmZ-w9-PEZ" id="nNY-3n-NfU"/>
+                        <outlet property="instructionLabel" destination="8gw-yl-y64" id="bo3-20-0Xy"/>
+                        <outlet property="latitudeField" destination="RSe-hl-0QN" id="eVT-Do-Bv0"/>
+                        <outlet property="longitudeField" destination="s9M-Ft-XFt" id="zkl-kR-Wwg"/>
+                        <outlet property="textSearchField" destination="TEl-RN-o1t" id="aJ1-my-crs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
