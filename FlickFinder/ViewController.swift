@@ -16,6 +16,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var longitudeField: UITextField!
 	@IBOutlet weak var imageTitle: UILabel!
 	@IBOutlet weak var instructionLabel: UILabel!
+	@IBOutlet weak var contentView: UIView!
 
 	let FLICKR_BASE_URL = "https://api.flickr.com/services/rest/"
 	let FLICKR_API_KEY = "911f85901e54879bf46dc72eb42df31c"
@@ -29,7 +30,34 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+		let leftConstraint = NSLayoutConstraint(
+			item: contentView,
+			attribute: NSLayoutAttribute.Leading,
+			relatedBy: NSLayoutRelation.Equal,
+			toItem: view,
+			attribute: NSLayoutAttribute.Leading,
+			multiplier: 1,
+			constant: 0)
+		let rightConstraint = NSLayoutConstraint(
+			item: contentView,
+			attribute: NSLayoutAttribute.Trailing,
+			relatedBy: NSLayoutRelation.Equal,
+			toItem: view,
+			attribute: NSLayoutAttribute.Trailing,
+			multiplier: 1,
+			constant: 0)
+
+		// TODO: adjust on rotation, or find a better way:
+		let heightConstraint = NSLayoutConstraint(
+			item: contentView,
+			attribute: NSLayoutAttribute.Height,
+			relatedBy: NSLayoutRelation.Equal,
+			toItem: view,
+			attribute: NSLayoutAttribute.Height,
+			multiplier: 1,
+			constant: 0 - view.layoutMargins.top - view.layoutMargins.bottom - 4)
+
+		view.addConstraints([leftConstraint, rightConstraint, heightConstraint])
     }
 
     override func didReceiveMemoryWarning() {
