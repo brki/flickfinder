@@ -37,6 +37,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+	override func viewWillAppear(animated: Bool) {
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardChangingSize:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+	}
+
+	override func viewWillDisappear(animated: Bool) {
+		NSNotificationCenter.defaultCenter().removeObserver(self)
+	}
+
 	@IBAction func searchByText(sender: UIButton) {
 		var parameters: [String: String] = [
 			"text": textSearchField.text
@@ -113,6 +121,11 @@ class ViewController: UIViewController {
 		let components = NSURLComponents()
 		components.queryItems = queryItems
 		return NSURL(string: FLICKR_BASE_URL + "?" + (components.percentEncodedQuery ?? ""))
+	}
+
+	// MARK: Keyboard handlers
+	func keyboardChangingSize(notification: NSNotification) {
+		// TODO: handle this ... try using a scroll view.
 	}
 }
 
