@@ -17,6 +17,8 @@ class ViewController: UIViewController {
 	@IBOutlet weak var imageTitle: UILabel!
 	@IBOutlet weak var instructionLabel: UILabel!
 	@IBOutlet weak var contentView: UIView!
+	var isRotating = false
+	var heightConstraint: NSLayoutConstraint?
 
 	let FLICKR_BASE_URL = "https://api.flickr.com/services/rest/"
 	let FLICKR_API_KEY = "911f85901e54879bf46dc72eb42df31c"
@@ -47,22 +49,42 @@ class ViewController: UIViewController {
 			multiplier: 1,
 			constant: 0)
 
-		// TODO: adjust on rotation, or find a better way:
-		let heightConstraint = NSLayoutConstraint(
+		heightConstraint = NSLayoutConstraint(
 			item: contentView,
 			attribute: NSLayoutAttribute.Height,
 			relatedBy: NSLayoutRelation.Equal,
 			toItem: view,
 			attribute: NSLayoutAttribute.Height,
 			multiplier: 1,
-			constant: 0 - view.layoutMargins.top - view.layoutMargins.bottom - 4)
+			constant: -UIApplication.sharedApplication().statusBarFrame.size.height)
 
-		view.addConstraints([leftConstraint, rightConstraint, heightConstraint])
+		view.addConstraints([leftConstraint, rightConstraint, heightConstraint!])
     }
+
+	func setHeightConstraintIfNeeded() {
+		if let constraint = heightConstraint {
+			let currentStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+			if currentStatusBarHeight != constraint.constant {
+				constraint.constant = -currentStatusBarHeight
+			}
+		}
+	}
+
+	override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+		isRotating = true
+		coordinator.animateAlongsideTransition(
+			{ context in
+				self.setHeightConstraintIfNeeded()
+			},
+			completion: { context in
+				self.isRotating = false
+		})
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+		imageView.image = nil
     }
 
 	override func viewWillAppear(animated: Bool) {
@@ -100,7 +122,7 @@ class ViewController: UIViewController {
 								if let photoURL = photo["url_m"] as? String {
 									titleText = (photo["title"] as? String ?? "")
 									image = self.imageFromURLString(photoURL)
-									if image != nil {
+									if image == nil {
 										println("Unable to fetch image")
 									}
 								} else {
