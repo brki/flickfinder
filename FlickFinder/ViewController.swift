@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
 	@IBOutlet weak var imageView: UIImageView!
 	@IBOutlet weak var textSearchField: UITextField!
@@ -16,9 +16,12 @@ class ViewController: UIViewController {
 	@IBOutlet weak var longitudeField: UITextField!
 	@IBOutlet weak var imageTitle: UILabel!
 	@IBOutlet weak var instructionLabel: UILabel!
+	@IBOutlet weak var scrollView: UIScrollView!
 	@IBOutlet weak var contentView: UIView!
+
 	var isRotating = false
 	var heightConstraint: NSLayoutConstraint?
+	var activeTextField: UITextField?
 
 	let FLICKR_BASE_URL = "https://api.flickr.com/services/rest/"
 	let FLICKR_API_KEY = "911f85901e54879bf46dc72eb42df31c"
@@ -32,6 +35,14 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+		// Set textField delegates
+		textSearchField.delegate = self
+		latitudeField.delegate = self
+		longitudeField.delegate = self
+
+		// Add constraints for the content view, which can not be done in the storyboard (pinning left/right edges to self.view,
+		// setting the height constraint based on the view size and the status bar size).
 		let leftConstraint = NSLayoutConstraint(
 			item: contentView,
 			attribute: NSLayoutAttribute.Leading,
@@ -96,6 +107,7 @@ class ViewController: UIViewController {
 	}
 
 	@IBAction func searchByText(sender: UIButton) {
+		hideKeyboard()
 		var parameters: [String: String] = [
 			"text": textSearchField.text
 		]
@@ -152,6 +164,12 @@ class ViewController: UIViewController {
 	@IBAction func searchBylongitudeLatitude(sender: UIButton) {
 	}
 
+	func hideKeyboard() {
+		if let textField = activeTextField {
+			textField.resignFirstResponder()
+		}
+	}
+
 	func imageFromURLString(string: String) -> UIImage? {
 		if let url = NSURL(string: string) {
 			if let data = NSData(contentsOfURL: url) {
@@ -174,8 +192,65 @@ class ViewController: UIViewController {
 	}
 
 	// MARK: Keyboard handlers
+
 	func keyboardChangingSize(notification: NSNotification) {
-		// TODO: handle this ... try using a scroll view.
+		if isRotating {
+			// No need to handle notifications during rotation
+			return
+		}
+		if let userInfo = notification.userInfo as [NSObject: AnyObject]? {
+			if let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.CGRectValue() {
+				let convertedEndFrame = view.convertRect(endFrame, fromView: view.window)
+				if convertedEndFrame.origin.y == view.bounds.height {
+					// Keyboard is hidden.
+					let contentInset = UIEdgeInsetsZero
+					scrollView.contentInset = contentInset
+					scrollView.scrollIndicatorInsets = contentInset
+				} else {
+					// Keyboard is visible.
+					let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double ?? 0.0
+					let animationOption = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UIViewAnimationOptions ?? UIViewAnimationOptions.TransitionNone
+					let keyboardTop = convertedEndFrame.origin.y
+
+					if let textField = activeTextField {
+						var textFieldRect = textField.convertRect(textField.bounds, toView: view)
+						let textFieldBottom = textFieldRect.origin.y + textFieldRect.height
+						let offset = textFieldBottom - keyboardTop
+						if offset > 0 {
+							let contentInset = UIEdgeInsets(top:0.0, left:0.0, bottom:convertedEndFrame.height, right:0.0)
+							scrollView.contentInset = contentInset
+							scrollView.scrollIndicatorInsets = contentInset
+							UIView.animateWithDuration(
+								animationDuration,
+								delay: 0.0,
+								options: animationOption,
+								animations: {
+									self.scrollView.scrollRectToVisible(textFieldRect, animated: false)
+								},
+								completion: nil)
+						}
+					}
+				}
+			}
+		}
 	}
+
+	// MARK: UITextFieldDelegate methods:
+
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+
+	func textFieldDidBeginEditing(textField: UITextField) {
+		activeTextField = textField
+	}
+
+	func textFieldDidEndEditing(textField: UITextField) {
+		if activeTextField == textField {
+			activeTextField = nil
+		}
+	}
+
 }
 
