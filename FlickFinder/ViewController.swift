@@ -64,23 +64,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			item: contentView,
 			attribute: NSLayoutAttribute.Height,
 			relatedBy: NSLayoutRelation.Equal,
-			toItem: view,
-			attribute: NSLayoutAttribute.Height,
+			toItem: nil,
+			attribute: NSLayoutAttribute.NotAnAttribute,
 			multiplier: 1,
-			constant: -UIApplication.sharedApplication().statusBarFrame.size.height)
+			constant: UIScreen.mainScreen().bounds.size.height - UIApplication.sharedApplication().statusBarFrame.size.height)
 
 		view.addConstraints([leftConstraint, rightConstraint, heightConstraint!])
     }
 
+	/**
+	Set the content view height constraint based on the space available.
+	*/
 	func setHeightConstraintIfNeeded() {
 		if let constraint = heightConstraint {
 			let currentStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
 			if currentStatusBarHeight != constraint.constant {
-				constraint.constant = -currentStatusBarHeight
+				constraint.constant = UIScreen.mainScreen().bounds.size.height - currentStatusBarHeight
 			}
 		}
 	}
 
+	/**
+	The status bar may or may not be visible in the new orientation.
+	Keep track of the rotation status.  When the keyboard is present, some UIKeyboardWillChangeFrameNotification
+	notifications are sent during rotation, but we can ignore those.
+	*/
 	override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 		isRotating = true
@@ -99,10 +107,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
 
 	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardChangingSize:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "statusBarChangingSize:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
 	}
 
 	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
 		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 
@@ -233,6 +244,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
 				}
 			}
 		}
+	}
+
+	// MARK: Status bar handler
+	func statusBarChangingSize(notification: NSNotification) {
+		setHeightConstraintIfNeeded()
 	}
 
 	// MARK: UITextFieldDelegate methods:
