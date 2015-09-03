@@ -13,6 +13,7 @@
 		D39C63711B90448600CE30AF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C63701B90448600CE30AF /* Images.xcassets */; };
 		D39C63741B90448600CE30AF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D39C63721B90448600CE30AF /* LaunchScreen.xib */; };
 		D39C63801B90448600CE30AF /* FlickFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C637F1B90448600CE30AF /* FlickFinderTests.swift */; };
+		D3BA7C9D1B98E1A60068E1A4 /* extension-String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7C9C1B98E1A60068E1A4 /* extension-String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		D39C63791B90448600CE30AF /* FlickFinderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlickFinderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C637E1B90448600CE30AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39C637F1B90448600CE30AF /* FlickFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickFinderTests.swift; sourceTree = "<group>"; };
+		D3BA7C9C1B98E1A60068E1A4 /* extension-String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "extension-String.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				D39C63701B90448600CE30AF /* Images.xcassets */,
 				D39C63721B90448600CE30AF /* LaunchScreen.xib */,
 				D39C63671B90448600CE30AF /* Supporting Files */,
+				D3BA7C9C1B98E1A60068E1A4 /* extension-String.swift */,
 			);
 			path = FlickFinder;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3BA7C9D1B98E1A60068E1A4 /* extension-String.swift in Sources */,
 				D39C636C1B90448600CE30AF /* ViewController.swift in Sources */,
 				D39C636A1B90448600CE30AF /* AppDelegate.swift in Sources */,
 			);
@@ -411,6 +415,7 @@
 				D39C63851B90448600CE30AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D39C63861B90448600CE30AF /* Build configuration list for PBXNativeTarget "FlickFinderTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +424,7 @@
 				D39C63881B90448600CE30AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

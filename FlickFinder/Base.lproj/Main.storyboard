@@ -69,7 +69,7 @@
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Latitude" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RSe-hl-0QN" userLabel="Latitude Field">
                                                         <rect key="frame" x="352" y="39" width="90" height="30"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                                     </textField>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Longitude" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s9M-Ft-XFt" userLabel="Longitude Field">
                                                         <rect key="frame" x="450" y="39" width="90" height="30"/>
@@ -77,7 +77,7 @@
                                                             <constraint firstAttribute="width" constant="90" id="y2S-1k-cKm"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMt-a7-ra0" userLabel="LatitudeLongitudeSearchButton">
                                                         <rect key="frame" x="548" y="38" width="32" height="32"/>
@@ -154,12 +154,16 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="hEF-AZ-a7e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7ng-KL-Qyr"/>
                             <constraint firstAttribute="trailing" secondItem="hEF-AZ-a7e" secondAttribute="trailing" id="Mux-MA-2Kl"/>
                             <constraint firstItem="hEF-AZ-a7e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Rcq-Jk-YLb"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hEF-AZ-a7e" secondAttribute="bottom" id="SlI-D3-LEF"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Cqa-Cq-KMn" appends="YES" id="SLZ-vP-SIO"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="2KJ-BB-XGl" id="Ysf-jN-gmV"/>
@@ -173,6 +177,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Cqa-Cq-KMn">
+                    <connections>
+                        <action selector="viewTapped:" destination="BYZ-38-t0r" id="T56-8N-8aK"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>
