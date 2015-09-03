@@ -173,6 +173,50 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	}
 	
 	@IBAction func searchBylongitudeLatitude(sender: UIButton) {
+		if let latitude = latitudeField.text.toDouble(), longitude = longitudeField.text.toDouble() {
+			if latitude > 90 || latitude < -90 {
+				imageTitle.text = "latitude must be between -90 and 90"
+			} else if longitude > 90 || longitude < -90 {
+				imageTitle.text = "longitude must be between -90 and 90"
+			} else {
+				let bbox = boundingBox(latitude: latitude, longitude: longitude)
+				// TODO: then do the flickr search
+			}
+		} else {
+			imageTitle.text = "Check that lat/long are valid numbers"
+		}
+	}
+
+	/**
+	Get a bounding box around the given position.
+	1 minute is approximately 1.85 kilometers.
+	*/
+	func boundingBox(#latitude: Double, longitude: Double, minutes: Double = 5) -> String {
+		let offset = minutes / 60
+		let minLatitude = wrapLatitude(latitude - offset)
+		let maxLatitude = wrapLatitude(latitude + offset)
+		let minLongitude = wrapLongitude(longitude - offset)
+		let maxLongitude = wrapLongitude(longitude + offset)
+		return "\(minLongitude),\(minLatitude),\(maxLongitude),\(maxLatitude)"
+	}
+
+	func wrapLatitude(value: Double) -> Double {
+		if value < -90 || value > 90 {
+			 return atan(sin(value) / abs(cos(value)))
+		}
+		return value
+	}
+
+	func wrapLongitude(value: Double) -> Double {
+		if value < -90 || value > 90 {
+			return atan2(sin(value), cos(value))
+		}
+		return value
+	}
+
+	@IBAction func viewTapped(sender: UITapGestureRecognizer) {
+		// Could call view.endEditing(true) here, but we know the currently active field.
+		activeTextField?.resignFirstResponder()
 	}
 
 	func hideKeyboard() {
