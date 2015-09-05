@@ -14,6 +14,7 @@
 		D39C63741B90448600CE30AF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D39C63721B90448600CE30AF /* LaunchScreen.xib */; };
 		D39C63801B90448600CE30AF /* FlickFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C637F1B90448600CE30AF /* FlickFinderTests.swift */; };
 		D3BA7C9D1B98E1A60068E1A4 /* extension-String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7C9C1B98E1A60068E1A4 /* extension-String.swift */; };
+		D3BA7C9F1B9AF0670068E1A4 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7C9E1B9AF0670068E1A4 /* Bucket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		D39C637E1B90448600CE30AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39C637F1B90448600CE30AF /* FlickFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickFinderTests.swift; sourceTree = "<group>"; };
 		D3BA7C9C1B98E1A60068E1A4 /* extension-String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "extension-String.swift"; sourceTree = "<group>"; };
+		D3BA7C9E1B9AF0670068E1A4 /* Bucket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			children = (
 				D39C63691B90448600CE30AF /* AppDelegate.swift */,
 				D39C636B1B90448600CE30AF /* ViewController.swift */,
+				D3BA7C9E1B9AF0670068E1A4 /* Bucket.swift */,
 				D39C636D1B90448600CE30AF /* Main.storyboard */,
 				D39C63701B90448600CE30AF /* Images.xcassets */,
 				D39C63721B90448600CE30AF /* LaunchScreen.xib */,
@@ -216,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3BA7C9D1B98E1A60068E1A4 /* extension-String.swift in Sources */,
+				D3BA7C9F1B9AF0670068E1A4 /* Bucket.swift in Sources */,
 				D39C636C1B90448600CE30AF /* ViewController.swift in Sources */,
 				D39C636A1B90448600CE30AF /* AppDelegate.swift in Sources */,
 			);

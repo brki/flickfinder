@@ -10,6 +10,10 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
 
+	enum SearchType: Int {
+		case Text, Geo
+	}
+
 	@IBOutlet weak var imageView: UIImageView!
 	@IBOutlet weak var textSearchField: UITextField!
 	@IBOutlet weak var latitudeField: UITextField!
@@ -22,11 +26,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	var isRotating = false
 	var heightConstraint: NSLayoutConstraint?
 	var activeTextField: UITextField?
+	var textSearchBucket: JsonBucket!
+	var geoSearchBucket: JsonBucket!
+	var textSearchChanged = false
+	var latLongSearchChanged = false
+	var waitingForSearchResults: SearchType?
+	let bucketCapacity = 1000  // Be aware: Flickr only returns the 4000 first results, so don't set this over 4000!
 
 	let FLICKR_BASE_URL = "https://api.flickr.com/services/rest/"
 	let FLICKR_API_KEY = "911f85901e54879bf46dc72eb42df31c"
 
-	lazy var FLICKR_DEFAULTS: Dictionary<String, String> = [
+	lazy var FLICKR_DEFAULTS: [String: String] = [
 		"api_key": self.FLICKR_API_KEY,
 		"format": "json",
 		"nojsoncallback": "1",
@@ -70,6 +80,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			constant: UIScreen.mainScreen().bounds.size.height - UIApplication.sharedApplication().statusBarFrame.size.height)
 
 		view.addConstraints([leftConstraint, rightConstraint, heightConstraint!])
+
+		textSearchBucket = JsonBucket(capacity: bucketCapacity)
+		geoSearchBucket = JsonBucket(capacity: bucketCapacity)
     }
 
 	/**
@@ -117,74 +130,166 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 
+	@IBAction func viewTapped(sender: UITapGestureRecognizer) {
+		// Could call view.endEditing(true) here, but we know the currently active field.
+		activeTextField?.resignFirstResponder()
+	}
+
 	@IBAction func searchByText(sender: UIButton) {
-		hideKeyboard()
-		var parameters: [String: String] = [
-			"text": textSearchField.text
-		]
+		if textSearchChanged {
+			prepareForNewSearchOfType(.Text)
+			textSearchChanged = false
 
-		if let url = flickrURLForMethod("flickr.photos.search", withParameters: parameters) {
-			let session = NSURLSession.sharedSession()
-			let request = NSURLRequest(URL: url)
-			let task = session.dataTaskWithRequest(request) { data, response, error in
-				if error != nil {
-					println("Error with request processing: \(error)")
-				} else {
-					var error: NSError?
-					let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &error) as! [String: AnyObject]
-					if let err = error {
-						println("Error converting received data to JSON: \(err)")
-					} else {
-						if let photos = json["photos"] as? [String: AnyObject], let photoList = photos["photo"] as? [[String: AnyObject]] {
-							var titleText: String?
-							var image: UIImage?
-
-							if photoList.count > 0 {
-								let index = Int(arc4random_uniform(UInt32(photoList.count)))
-								let photo = photoList[index]
-								if let photoURL = photo["url_m"] as? String {
-									titleText = (photo["title"] as? String ?? "")
-									image = self.imageFromURLString(photoURL)
-									if image == nil {
-										println("Unable to fetch image")
-									}
-								} else {
-									println("url not found with expected key")
-								}
-							} else {
-								titleText = "No photos found"
-							}
-
-							dispatch_async(dispatch_get_main_queue()) {
-								self.imageTitle.text = titleText
-								self.imageView.image = image
-								self.instructionLabel.hidden = image != nil
-							}
-						} else {
-							println("Error extracting photos information")
-						}
-					}
-				}
-			}
-			task.resume()
+			var parameters: [String: String] = [
+				"text": textSearchField.text,
+				"per_page": "400"
+			]
+			fillBucket(textSearchBucket, ofType: .Text, parameters: parameters)
 		} else {
-			println("Unable to generate URL")
+			displayNextPhotoFromBucket(textSearchBucket)
 		}
 	}
 	
 	@IBAction func searchBylongitudeLatitude(sender: UIButton) {
-		if let latitude = latitudeField.text.toDouble(), longitude = longitudeField.text.toDouble() {
-			if latitude > 90 || latitude < -90 {
-				imageTitle.text = "latitude must be between -90 and 90"
-			} else if longitude > 90 || longitude < -90 {
-				imageTitle.text = "longitude must be between -90 and 90"
+		if latLongSearchChanged {
+			if let latitude = latitudeField.text.toDouble(), longitude = longitudeField.text.toDouble() {
+				if latitude > 90 || latitude < -90 {
+					imageTitle.text = "latitude must be between -90 and 90"
+				} else if longitude > 180 || longitude < -180 {
+					imageTitle.text = "longitude must be between -180 and 180"
+				} else {
+					latLongSearchChanged = false
+					prepareForNewSearchOfType(.Geo)
+					let bbox = boundingBox(latitude: latitude, longitude: longitude)
+					var parameters: [String: String] = [
+						"bbox": bbox,
+						"per_page": "250"
+					]
+					fillBucket(geoSearchBucket, ofType: .Geo, parameters: parameters)
+				}
 			} else {
-				let bbox = boundingBox(latitude: latitude, longitude: longitude)
-				// TODO: then do the flickr search
+				imageTitle.text = "Check that lat/long are valid numbers"
 			}
 		} else {
-			imageTitle.text = "Check that lat/long are valid numbers"
+			displayNextPhotoFromBucket(geoSearchBucket)
 		}
+	}
+
+	func prepareForNewSearchOfType(searchType: SearchType) {
+		hideKeyboard()
+		imageTitle.text = ""
+		waitingForSearchResults = searchType
+		switch searchType {
+		case .Text:
+			textSearchBucket.empty()
+		case .Geo:
+			geoSearchBucket.empty()
+		}
+	}
+
+	/**
+	Add results to bucket.
+	Calls self.checkBucketContents() when some results have been fetched (or there are no results)
+	This may call itself, if so, it will be running on a background thread.
+	*/
+	func fillBucket(bucket: JsonBucket, ofType searchType: SearchType, var parameters: [String: String], page: Int = 1) {
+		parameters["page"] = "\(page)"
+		let url = self.flickrURLForMethod("flickr.photos.search", withParameters: parameters)
+		if url == nil {
+			println("Unable to generate URL")
+			return
+		}
+		let session = NSURLSession.sharedSession()
+		let request = NSURLRequest(URL: url!)
+		let task = session.dataTaskWithRequest(request) { data, response, error in
+			if error != nil {
+				println("Error with request processing: \(error)")
+			} else {
+				var error: NSError?
+				let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &error) as! [String: AnyObject]
+				if let err = error {
+					println("Error converting received data to JSON: \(err)")
+				} else {
+					if let photos = json["photos"] as? [String: AnyObject], let photoList = photos["photo"] as? [[String: AnyObject]] {
+						if photoList.count > 0 {
+							bucket.add(photoList)
+							self.checkBucketContents(bucket, ofType:searchType)
+							if !bucket.isFull && self.morePhotosExist(currentPage: page, json: json) {
+								self.fillBucket(bucket, ofType: searchType, parameters: parameters, page: page + 1)
+							}
+						} else {
+							// empty bucket ... deal with it.
+							self.checkBucketContents(bucket, ofType:searchType)
+						}
+					} else {
+						println("Error extracting photos information")
+					}
+				}
+			}
+		}
+		task.resume()
+
+	}
+
+	/**
+	Notification handler called when something is in the bucket (or there was nothing to add to the bucket).
+
+	This is called from a non-main thread.
+	*/
+	func checkBucketContents(bucket: JsonBucket, ofType searchType: SearchType) {
+		if let waitingForType = waitingForSearchResults {
+			if waitingForType == searchType {
+				waitingForSearchResults = nil
+				dispatch_async(dispatch_get_main_queue()) {
+					self.displayNextPhotoFromBucket(bucket)
+				}
+			}
+		}
+	}
+
+	func morePhotosExist(#currentPage: Int, json: [String: AnyObject]) -> Bool {
+		var pages: Int = 0
+		if let pageCount = json["pages"] as? String {
+			if let pageCountInt = pageCount.toInt() {
+				pages = pageCountInt
+			} else {
+				println("Unparseable value for 'pages': \(pageCount)")
+			}
+		} else if let pageCount = json["pages"] as? Int {
+			pages = pageCount
+		}
+		return pages < currentPage
+	}
+
+	func displayNextPhotoFromBucket(bucket: JsonBucket) {
+		if bucket.count == 0 {
+			updateImageAndTitle(nil, title: "No photos found")
+		} else {
+			if let photo = bucket.take() {
+				if let photoURL = photo["url_m"] as? String {
+					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+						var titleText = (photo["title"] as? String ?? "")
+						let image = self.imageFromURLString(photoURL)
+						if image == nil {
+							titleText = "Unable to fetch image (\(titleText))"
+						}
+						dispatch_async(dispatch_get_main_queue()) {
+							self.updateImageAndTitle(image, title: titleText)
+							self.instructionLabel.hidden = image != nil
+						}
+					}
+				} else {
+					println("url not found with expected key")
+				}
+			} else {
+				updateImageAndTitle(nil, title: "Error getting photo from bucket")
+			}
+		}
+	}
+
+	func updateImageAndTitle(image: UIImage?, title: String) {
+		imageTitle.text = title
+		imageView.image = image
 	}
 
 	/**
@@ -208,15 +313,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	}
 
 	func wrapLongitude(value: Double) -> Double {
-		if value < -90 || value > 90 {
+		if value < -180 || value > 180 {
 			return atan2(sin(value), cos(value))
 		}
 		return value
-	}
-
-	@IBAction func viewTapped(sender: UITapGestureRecognizer) {
-		// Could call view.endEditing(true) here, but we know the currently active field.
-		activeTextField?.resignFirstResponder()
 	}
 
 	func hideKeyboard() {
@@ -312,5 +412,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		}
 	}
 
+	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+		if textField == textSearchField {
+			textSearchChanged = true
+		} else {
+			latLongSearchChanged = true
+		}
+		return true
+	}
 }
 
