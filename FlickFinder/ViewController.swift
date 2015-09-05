@@ -136,17 +136,21 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	}
 
 	@IBAction func searchByText(sender: UIButton) {
-		if textSearchChanged {
-			prepareForNewSearchOfType(.Text)
-			textSearchChanged = false
-
-			var parameters: [String: String] = [
-				"text": textSearchField.text,
-				"per_page": "400"
-			]
-			fillBucket(textSearchBucket, ofType: .Text, parameters: parameters)
+		if textSearchField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) == "" {
+			imageTitle.text = "Add some text to search for first!"
 		} else {
-			displayNextPhotoFromBucket(textSearchBucket)
+			if textSearchChanged {
+				prepareForNewSearchOfType(.Text)
+				textSearchChanged = false
+
+				var parameters: [String: String] = [
+					"text": textSearchField.text,
+					"per_page": "400"
+				]
+				fillBucket(textSearchBucket, ofType: .Text, parameters: parameters)
+			} else {
+				displayNextPhotoFromBucket(textSearchBucket)
+			}
 		}
 	}
 	
