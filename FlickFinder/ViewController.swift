@@ -193,7 +193,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
 	/**
 	Add results to bucket.
-	Calls self.checkBucketContents() when some results have been fetched (or there are no results)
+	Calls self.checkBucketContents() when some results have been fetched (or there are no results).
 	This may call itself, if so, it will be running on a background thread.
 	*/
 	func fillBucket(bucket: JsonBucket, ofType searchType: SearchType, var parameters: [String: String], page: Int = 1) {
@@ -284,6 +284,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 					}
 				} else {
 					println("url not found with expected key")
+					displayNextPhotoFromBucket(bucket)
 				}
 			} else {
 				updateImageAndTitle(nil, title: "Error getting photo from bucket")
